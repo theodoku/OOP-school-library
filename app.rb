@@ -13,40 +13,44 @@ class App
     @rentals = []
   end
 
-  def create_a_book
+  def create_book
     puts 'Enter book\'s title'
     title = gets.chomp
     puts 'Enter author\'s name'
     author = gets.chomp
-    book = Book.new(title, author)
+    puts 'Enter ISBN'
+    isbn = gets.chomp
+    book = Book.new(title, author, isbn)
     @books << book
     puts "Created #{book.title} by #{book.author}"
   end
 
-  def list_all_books
+  def list_books
     if @books.empty?
       puts 'There are no books to display currently'
     else
       @books.each do |book|
-        puts "Title: '#{book.title}', Author: '#{book.author}'"
+        puts "Title: '#{book.title}', Author: '#{book.author}' ID: '#{book.id}'"
       end
     end
   end
 
-  def list_all_people
+  def list_people
     if @people.empty?
       puts 'There\'s no one here currently'
     else
       @people.each do |person|
-        puts "Name: #{person.name} Age: #{person.age} ID: #{person.ID}"
+        puts "Name: #{person.name} Age: #{person.age} ID: #{person.id}"
       end
     end
   end
 
-  def create_a_person
+  def create_person
     puts 'I am a:'
     puts '1 - student'
     puts '2 - teacher'
+
+    person_input = gets.chomp.to_i
 
     case person_input
     when 1 then create_student
@@ -73,29 +77,13 @@ class App
   def create_teacher
     puts 'What is your name?'
     name = gets.chomp
-    puts 'How olda are you?'
+    puts 'How old are you?'
     age = gets.chomp
     puts 'Enter your specialization'
     specialization = gets.chomp
     teacher = Teacher.new(name, age, specialization)
     @people << teacher
     puts 'Teacher successfully created'
-  end
-
-  def create_rental
-    return puts 'There are no books in the library' if @books.empty?
-    return puts 'There are no people in the system' if @people.empty?
-
-    book = select_book
-    return puts 'Invalid book selection.' if book.nil?
-
-    person = select_person
-    return puts 'Invalid person selection.' if person.nil?
-
-    date = input_rental_date
-    rental = Rental.new(date, book, peson)
-    @rentals << rental
-    puts 'The book has been successfully rented'
   end
 
   def select_book
@@ -126,12 +114,38 @@ class App
     @people[person_id_input - 1]
   end
 
+  def create_rental
+    puts 'Enter the person ID:'
+    person_id = gets.chomp.to_i
+    person = @people.find { |person| person.id == person_id }
+    
+    if person.nil?
+      puts 'Person not found'
+      return
+    end
+    
+    puts 'Enter the book ID:'
+    book_id = gets.chomp.to_i
+    book = @books.find { |book| book.id == book_id }
+    
+    if book.nil?
+      puts 'Book not found'
+      return
+    end
+    
+    rental_date = input_rental_date
+    rental = Rental.new(rental_date, person, book)
+    @rentals << rental
+    
+    puts 'Rental created successfully'
+  end
+  
   def input_rental_date
     puts 'Enter the rental date [yyyy-mm-dd]:'
     gets.chomp
   end
 
-  def list_all_rentals(person_id)
+  def list_rentals_for_person(person_id)
     rentals = @rentals.select { |rental| rental.person.id == person_id }
     return puts 'No rentals found for the given person ID!' if rentals.empty?
 
