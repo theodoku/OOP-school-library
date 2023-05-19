@@ -45,16 +45,21 @@ def handle_choice(app, choice)
   }
 
   if actions.key?(choice)
-    send(actions[choice], app)
+    case choice
+    when 6
+      handle_list_rentals_for_person(app)
+    else
+      app.send(actions[choice])
+    end
   else
     puts 'Please choose a number between 1 and 7'
   end
 end
 
-def list_rentals_for_person(app)
-  puts 'Enter person\'s ID:'
+def handle_list_rentals_for_person(app)
+  puts 'Enter the person ID:'
   person_id = gets.chomp.to_i
-  app.list_all_rentals(person_id)
+  app.list_rentals_for_person(person_id)
 end
 
 def exit_app
