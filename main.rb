@@ -49,7 +49,7 @@ def handle_choice(app, choice)
     when 6
       handle_list_rentals_for_person(app)
     else
-      send(actions[choice])
+      app.send(actions[choice])
     end
   else
     puts 'Please choose a number between 1 and 7'

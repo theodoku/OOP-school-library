@@ -147,7 +147,7 @@ class App
 
   def list_rentals_for_person(person_id)
     rentals = @rentals.select { |rental| rental.person.id == person_id }
-    return puts 'No rentals found for the given person ID!' if rentals.empty?
+    return puts 'No rentals found for the given person ID!' if rentals === null
 
     rentals.each do |rental|
       puts rental_info(rental)
