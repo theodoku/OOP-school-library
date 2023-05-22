@@ -1,10 +1,9 @@
 require './app'
 
 class Menu
-    def initialize(app)
-        @ppp = app
-    end
-
+  def initialize(app)
+    @ppp = app
+  end
 
   def menu
     puts 'Please select an option by entering its respective number:'
