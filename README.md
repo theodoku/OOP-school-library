@@ -85,6 +85,11 @@ Install this project with:
 - Twitter: [@twitterhandle](https://twitter.com/dok_theo)
 - LinkedIn: [LinkedIn](https://www.linkedin.com/in/theophilus-doku/)
 
+👤 **Caleb Nwaizu**
+
+- GitHub: [@githubhandle](https://github.com/calebchris000)
+- Twitter: [@twitterhandle](https://twitter.com/calebchris000)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/calebchris000)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -11,7 +11,7 @@ def main
   loop do
     choice = menu.menu
 
-    menu.handle_choice(app, choice) 
+    menu.handle_choice(app, choice)
   end
 end
 
