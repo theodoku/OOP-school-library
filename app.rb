@@ -8,7 +8,6 @@ require_relative './nameable'
 require_relative './book_selection'
 require_relative './person_selection'
 
-
 class App
   def initialize
     @books = []
