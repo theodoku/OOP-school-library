@@ -127,7 +127,7 @@ If you like this project add ⭐ to the github
 
 ## 🙏 Acknowledgments <a name="acknowledgements"></a>
 
-I would like to thank [Microverse](https://github.com/microverseinc) for this project
+I would like to thank [Microverse](https://github.com/microverseinc) for this project. It's been an honour working on this project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
