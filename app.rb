@@ -5,8 +5,8 @@ require_relative './rental'
 require_relative './student'
 require_relative './teacher'
 require_relative './nameable'
-require_relative './book_selection'  
-require_relative './person_selection' 
+require_relative './book_selection'
+require_relative './person_selection'
 
 
 class App
