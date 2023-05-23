@@ -7,12 +7,17 @@ require_relative './teacher'
 require_relative './nameable'
 require_relative './book_selection'
 require_relative './person_selection'
+require_relative './file_handler'
 
 class App
   def initialize
     @books = []
     @people = []
     @rentals = []
+    @save_student = []
+    @save_teachers = []
+    @save_rentals = []
+    @save_books = []
     @book_selection = BookSelection.new(@books)
     @person_selection = PersonSelection.new(@people)
   end
@@ -21,6 +26,13 @@ class App
     book_data = prompt_book_data
     book = Book.new(*book_data)
     @books << book
+    @file_handler = File_Handler.new('./book.json')
+    @save_student << {
+      "Title" => book.title,
+      "Author" => book.author,
+      "id" => book.id,
+    }
+    @file_handler.write_to_file(@save_student.to_json)
     puts "Created #{book.title} by #{book.author}"
   end
 
@@ -73,6 +85,14 @@ class App
     student_data = prompt_student_data
     student = Student.new(*student_data)
     @people << student
+    @file_handler = File_Handler.new('./student.json')
+    @save_student << {
+      "Age" => student.age,
+      "Name" => student.name,
+      "ID" => student.id
+    }
+    @file_handler.write_to_file(@save_student.to_json)
+    student.id
     puts 'Student successfully created'
   end
 
@@ -92,6 +112,14 @@ class App
     teacher_data = prompt_teacher_data
     teacher = Teacher.new(*teacher_data)
     @people << teacher
+    @file_handler = File_Handler.new('./teachers.json')
+    @save_teachers << {
+      "Age" => teacher.age,
+      "Name" => teacher.name,
+      "Specialization" => teacher.specialization,
+      "ID" => teacher.id
+    }
+    @file_handler.write_to_file(@save_teachers.to_json)
     puts 'Teacher successfully created'
   end
 
@@ -127,6 +155,21 @@ class App
     rental_date = input_rental_date
     rental = Rental.new(rental_date, person, book)
     @rentals << rental
+
+    @file_handler = File_Handler.new('./rentals.json')
+    @save_rentals << {
+      "Date" => rental.date,
+      "Person"  => [
+        "Name" => person.name,
+        "ID" => person.id
+      ],
+      "Book" => [
+        "Title" => book.title,
+        "Author" => book.author,
+        "ID" => book.id
+      ],
+    }
+    @file_handler.write_to_file(@save_rentals.to_json)
 
     puts 'Rental created successfully'
   end
