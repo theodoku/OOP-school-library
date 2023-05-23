@@ -5,24 +5,33 @@ require_relative './rental'
 require_relative './student'
 require_relative './teacher'
 require_relative './nameable'
+require_relative './book_selection'
+require_relative './person_selection'
 
 class App
   def initialize
     @books = []
     @people = []
     @rentals = []
+    @book_selection = BookSelection.new(@books)
+    @person_selection = PersonSelection.new(@people)
   end
 
   def create_book
+    book_data = prompt_book_data
+    book = Book.new(*book_data)
+    @books << book
+    puts "Created #{book.title} by #{book.author}"
+  end
+
+  def prompt_book_data
     puts 'Enter book\'s title'
     title = gets.chomp
     puts 'Enter author\'s name'
     author = gets.chomp
     puts 'Enter ISBN'
     isbn = gets.chomp
-    book = Book.new(title, author, isbn)
-    @books << book
-    puts "Created #{book.title} by #{book.author}"
+    [title, author, isbn]
   end
 
   def list_books
@@ -61,6 +70,13 @@ class App
   end
 
   def create_student
+    student_data = prompt_student_data
+    student = Student.new(*student_data)
+    @people << student
+    puts 'Student successfully created'
+  end
+
+  def prompt_student_data
     puts 'What is your name?'
     name = gets.chomp
     puts 'How old are you?'
@@ -68,50 +84,25 @@ class App
     puts 'What grade are you?'
     classroom = gets.chomp
     puts 'Do you have your parents\' permission?'
-    parent_permission = gets.chomp
-    student = Student.new(name, age, classroom, parent_permission: parent_permission)
-    @people << student
-    puts 'Student successfully created'
+    gets.chomp
+    [name, age, classroom]
   end
 
   def create_teacher
+    teacher_data = prompt_teacher_data
+    teacher = Teacher.new(*teacher_data)
+    @people << teacher
+    puts 'Teacher successfully created'
+  end
+
+  def prompt_teacher_data
     puts 'What is your name?'
     name = gets.chomp
     puts 'How old are you?'
     age = gets.chomp
     puts 'Enter your specialization'
     specialization = gets.chomp
-    teacher = Teacher.new(name, age, specialization)
-    @people << teacher
-    puts 'Teacher successfully created'
-  end
-
-  def select_book
-    return nil if @books.empty?
-
-    book_options = @books.map.with_index(1) do |book, index|
-      "Number: #{index} - Title: #{book.title}, Author: #{book.author}"
-    end
-    puts book_options
-
-    book_id_input = gets.chomp.to_i
-    return nil if book_id_input < 1 || book_id_input > @books.size
-
-    @books[book_id_input - 1]
-  end
-
-  def select_person
-    return nil if @people.empty?
-
-    people_options = @people.map.with_index(1) do |person, index|
-      "Number: #{index} - Role: #{person.class.name}, Name: #{person.name}, ID: #{person.id}"
-    end
-    puts people_options
-
-    person_id_input = gets.chomp.to_i
-    return nil if person_id_input < 1 || person_id_input > @people.size
-
-    @people[person_id_input - 1]
+    [name, age, specialization]
   end
 
   def create_rental
@@ -156,5 +147,13 @@ class App
 
   def rental_info(rental)
     "#{rental.book.title} by #{rental.book.author}, rented on #{rental.date}"
+  end
+
+  def select_book
+    @book_selection.select_book
+  end
+
+  def select_person
+    @person_selection.select_person
   end
 end
