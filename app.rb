@@ -14,15 +14,20 @@ class App
   end
 
   def create_book
+    book_data = prompt_book_data
+    book = Book.new(*book_data)
+    @books << book
+    puts "Created #{book.title} by #{book.author}"
+  end
+
+  def prompt_book_data
     puts 'Enter book\'s title'
     title = gets.chomp
     puts 'Enter author\'s name'
     author = gets.chomp
     puts 'Enter ISBN'
     isbn = gets.chomp
-    book = Book.new(title, author, isbn)
-    @books << book
-    puts "Created #{book.title} by #{book.author}"
+    [title, author, isbn]
   end
 
   def list_books
@@ -61,6 +66,13 @@ class App
   end
 
   def create_student
+    student_data = prompt_student_data
+    student = Student.new(*student_data)
+    @people << student
+    puts 'Student successfully created'
+  end
+
+  def prompt_student_data
     puts 'What is your name?'
     name = gets.chomp
     puts 'How old are you?'
@@ -69,21 +81,24 @@ class App
     classroom = gets.chomp
     puts 'Do you have your parents\' permission?'
     parent_permission = gets.chomp
-    student = Student.new(name, age, classroom, parent_permission: parent_permission)
-    @people << student
-    puts 'Student successfully created'
+    [name, age, classroom]
   end
 
   def create_teacher
+    teacher_data = prompt_teacher_data
+    teacher = Teacher.new(*teacher_data)
+    @people << teacher
+    puts 'Teacher successfully created'
+  end
+
+  def prompt_teacher_data
     puts 'What is your name?'
     name = gets.chomp
     puts 'How old are you?'
     age = gets.chomp
     puts 'Enter your specialization'
     specialization = gets.chomp
-    teacher = Teacher.new(name, age, specialization)
-    @people << teacher
-    puts 'Teacher successfully created'
+    [name, age, specialization]
   end
 
   def select_book
