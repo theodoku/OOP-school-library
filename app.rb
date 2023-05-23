@@ -80,7 +80,7 @@ class App
     puts 'What grade are you?'
     classroom = gets.chomp
     puts 'Do you have your parents\' permission?'
-    parent_permission = gets.chomp
+    gets.chomp
     [name, age, classroom]
   end
 
