@@ -1,4 +1,4 @@
-# rubocop:disable all
+# rubocop:disable Metrics/ClassLength
 
 require_relative './book'
 require_relative './classroom'
@@ -19,8 +19,7 @@ class App
     @books = []
     @people = []
     @rentals = []
-    @save_student = []
-    @save_teachers = []
+    @save_people = []
     @save_rentals = []
     @save_books = []
     @book_selection = BookSelection.new(@books)
@@ -34,12 +33,12 @@ class App
     book = Book.new(*book_data)
     @books << book
     @file_handler = FileHandler.new('./book.json')
-    @save_student << {
+    @save_books << {
       'Title' => book.title,
       'Author' => book.author,
       'id' => book.id
     }
-    @file_handler.write_to_file(@save_student.to_json)
+    @file_handler.write_to_file(@save_books.to_json)
     puts "Created #{book.title} by #{book.author}"
   end
 
@@ -92,14 +91,15 @@ class App
     student_data = prompt_student_data
     student = Student.new(*student_data)
     @people << student
-    @file_handler = FileHandler.new('./student.json')
-    @save_student << {
+    @save_people << {
       'Name' => student.name,
       'Age' => student.age,
-      'ID' => student.id
+      'Classroom' => student.classroom,
+      'ID' => student.id,
+      'Type' => 'Student'
     }
-    @file_handler.write_to_file(@save_student.to_json)
-    student.id
+    @file_handler = FileHandler.new('./people.json')
+    @file_handler.write_to_file(@save_people.to_json)
     puts 'Student successfully created'
   end
 
@@ -119,14 +119,15 @@ class App
     teacher_data = prompt_teacher_data
     teacher = Teacher.new(*teacher_data)
     @people << teacher
-    @file_handler = FileHandler.new('./teachers.json')
-    @save_teachers << {
+    @save_people << {
       'Name' => teacher.name,
       'Age' => teacher.age,
       'Specialization' => teacher.specialization,
-      'ID' => teacher.id
+      'ID' => teacher.id,
+      'Type' => 'Teacher'
     }
-    @file_handler.write_to_file(@save_teachers.to_json)
+    @file_handler = FileHandler.new('./people.json')
+    @file_handler.write_to_file(@save_people.to_json)
     puts 'Teacher successfully created'
   end
 
@@ -234,3 +235,4 @@ class App
     load_rentals
   end
 end
+# rubocop:enable Metrics/ClassLength
