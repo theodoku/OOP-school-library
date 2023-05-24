@@ -24,7 +24,6 @@ class App
     @save_books = []
     @book_selection = BookSelection.new(@books)
     @person_selection = PersonSelection.new(@people)
-
     load_data
   end
 
