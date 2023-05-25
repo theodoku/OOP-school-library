@@ -1,7 +1,7 @@
 require_relative '../teacher'
 
 RSpec.describe Teacher do
-  describe '#Book Test' do
+  describe '#Teacher Test' do
     it 'should create new Teacher Info' do
       name = 'Ariel Camus'
       age = '31'
