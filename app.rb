@@ -15,6 +15,7 @@ require_relative './load_rentals'
 require_relative './load_books'
 
 class App
+  attr_reader :save_people, :save_books, :save_rentals
   def initialize
     @books = []
     @people = []
@@ -37,7 +38,6 @@ class App
       'Author' => book.author,
       'id' => book.id
     }
-    @file_handler.write_to_file(@save_books.to_json)
     puts "Created #{book.title} by #{book.author}"
   end
 
@@ -98,7 +98,6 @@ class App
       'Type' => 'Student'
     }
     @file_handler = FileHandler.new('./people.json')
-    @file_handler.write_to_file(@save_people.to_json)
     puts 'Student successfully created'
   end
 
@@ -126,7 +125,7 @@ class App
       'Type' => 'Teacher'
     }
     @file_handler = FileHandler.new('./people.json')
-    @file_handler.write_to_file(@save_people.to_json)
+    # @file_handler.write_to_file(@save_people.to_json)
     puts 'Teacher successfully created'
   end
 
@@ -182,7 +181,6 @@ class App
         'ID' => book.id
       }
     }
-    @file_handler.write_to_file(@save_rentals.to_json)
   end
 
   def input_rental_date

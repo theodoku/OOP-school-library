@@ -1,8 +1,10 @@
 require './app'
+require './file_handler'
 
 class Menu
+  attr_reader :app
   def initialize(app)
-    @ppp = app
+    @app = app
   end
 
   def menu
@@ -40,6 +42,8 @@ class Menu
       case choice
       when 6
         handle_list_rentals_for_person(app)
+      when 7
+        exit_app
       else
         app.send(actions[choice])
       end
@@ -55,7 +59,15 @@ class Menu
   end
 
   def exit_app
-    puts 'Thank you for using this app!'
+    people = FileHandler.new('./people.json')
+    people.write_to_file(@app.save_people.to_json)
+
+    books = FileHandler.new('./book.json')
+    books.write_to_file(@app.save_books.to_json)
+
+    rental = FileHandler.new('./rentals.json')
+    rental.write_to_file(@app.save_rentals.to_json)
+    puts 'Thank you for using this apqp!'
     exit
   end
 end
