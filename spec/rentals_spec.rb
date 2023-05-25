@@ -2,7 +2,6 @@ require_relative '../rental'
 require_relative '../teacher'
 require_relative '../book'
 
-
 RSpec.describe Rental do
   describe '#Rental Test' do
     it 'should create a new rental' do
