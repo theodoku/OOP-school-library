@@ -3,6 +3,7 @@ require './file_handler'
 
 class Menu
   attr_reader :app
+
   def initialize(app)
     @app = app
   end
@@ -37,13 +38,11 @@ class Menu
       6 => :list_rentals_for_person,
       7 => :exit_app
     }
-
     if actions.key?(choice)
       case choice
       when 6
         handle_list_rentals_for_person(app)
-      when 7
-        exit_app
+      when 7 then exit_app
       else
         app.send(actions[choice])
       end

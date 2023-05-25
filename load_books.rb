@@ -4,6 +4,7 @@ def load_books
   @file_handler = FileHandler.new('./book.json')
   data = @file_handler.read_from_file
   return if data.nil?
+
   @save_books = JSON.parse(data)
 
   @save_books.each do |book_data|

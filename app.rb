@@ -16,6 +16,7 @@ require_relative './load_books'
 
 class App
   attr_reader :save_people, :save_books, :save_rentals
+
   def initialize
     @books = []
     @people = []
