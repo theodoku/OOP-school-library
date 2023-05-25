@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/ClassLength
+
 require_relative './book'
 require_relative './classroom'
 require_relative './person'
@@ -7,20 +9,36 @@ require_relative './teacher'
 require_relative './nameable'
 require_relative './book_selection'
 require_relative './person_selection'
+require_relative './file_handler'
+require_relative './load_people'
+require_relative './load_rentals'
+require_relative './load_books'
 
 class App
+  attr_reader :save_people, :save_books, :save_rentals
+
   def initialize
     @books = []
     @people = []
     @rentals = []
+    @save_people = []
+    @save_rentals = []
+    @save_books = []
     @book_selection = BookSelection.new(@books)
     @person_selection = PersonSelection.new(@people)
+    load_data
   end
 
   def create_book
     book_data = prompt_book_data
     book = Book.new(*book_data)
     @books << book
+    @file_handler = FileHandler.new('./book.json')
+    @save_books << {
+      'Title' => book.title,
+      'Author' => book.author,
+      'id' => book.id
+    }
     puts "Created #{book.title} by #{book.author}"
   end
 
@@ -73,6 +91,14 @@ class App
     student_data = prompt_student_data
     student = Student.new(*student_data)
     @people << student
+    @save_people << {
+      'Name' => student.name,
+      'Age' => student.age,
+      'Classroom' => student.classroom,
+      'ID' => student.id,
+      'Type' => 'Student'
+    }
+    @file_handler = FileHandler.new('./people.json')
     puts 'Student successfully created'
   end
 
@@ -92,6 +118,15 @@ class App
     teacher_data = prompt_teacher_data
     teacher = Teacher.new(*teacher_data)
     @people << teacher
+    @save_people << {
+      'Name' => teacher.name,
+      'Age' => teacher.age,
+      'Specialization' => teacher.specialization,
+      'ID' => teacher.id,
+      'Type' => 'Teacher'
+    }
+    @file_handler = FileHandler.new('./people.json')
+    # @file_handler.write_to_file(@save_people.to_json)
     puts 'Teacher successfully created'
   end
 
@@ -108,27 +143,45 @@ class App
   def create_rental
     puts 'Enter the person ID:'
     person_id = gets.chomp.to_i
-    person = @people.find { |p| p.id == person_id }
-
-    if person.nil?
-      puts 'Person not found'
-      return
-    end
+    person = find_person_by_id(person_id)
+    return puts 'Person not found' if person.nil?
 
     puts 'Enter the book ID:'
     book_id = gets.chomp.to_i
-    book = @books.find { |b| b.id == book_id }
-
-    if book.nil?
-      puts 'Book not found'
-      return
-    end
+    book = find_book_by_id(book_id)
+    return puts 'Book not found' if book.nil?
 
     rental_date = input_rental_date
     rental = Rental.new(rental_date, person, book)
     @rentals << rental
 
+    save_rental_to_file(rental, person, book)
+
     puts 'Rental created successfully'
+  end
+
+  def find_person_by_id(person_id)
+    @people.find { |p| p.id == person_id }
+  end
+
+  def find_book_by_id(book_id)
+    @books.find { |b| b.id == book_id }
+  end
+
+  def save_rental_to_file(rental, person, book)
+    @file_handler = FileHandler.new('./rentals.json')
+    @save_rentals << {
+      'Date' => rental.date,
+      'Person' => {
+        'Name' => person.name,
+        'ID' => person.id
+      },
+      'Book' => {
+        'Title' => book.title,
+        'Author' => book.author,
+        'ID' => book.id
+      }
+    }
   end
 
   def input_rental_date
@@ -137,16 +190,33 @@ class App
   end
 
   def list_rentals_for_person(person_id)
-    rentals = @rentals.select { |rental| rental.person.id == person_id }
-    return puts 'No rentals found for the given person ID!' if rentals.empty?
+    rentals = @rentals.select { |r| r.person.id == person_id }
 
-    rentals.each do |rental|
-      puts rental_info(rental)
+    if rentals.empty?
+      puts 'No rentals found for the person ID.'
+    else
+      rentals.each do |rental|
+        person = rental.person
+        book = rental.book
+        puts "Rental Date: #{rental.date}"
+        puts "Person ID: #{person.id}"
+        puts "Person Name: #{person.name}"
+        puts "Book ID: #{book.id}"
+        puts "Book Title: #{book.title}"
+        puts '---'
+      end
     end
   end
 
-  def rental_info(rental)
-    "#{rental.book.title} by #{rental.book.author}, rented on #{rental.date}"
+  def handle_list_rentals_for_person
+    puts 'Enter the person ID:'
+    person_id = gets.chomp.to_i
+
+    list_rentals_for_person(person_id)
+  end
+
+  def rental_info(date, _person, book)
+    "#{book['Title']} by #{book['Author']}, rented on #{date}"
   end
 
   def select_book
@@ -156,4 +226,11 @@ class App
   def select_person
     @person_selection.select_person
   end
+
+  def load_data
+    load_books
+    load_people
+    load_rentals
+  end
 end
+# rubocop:enable Metrics/ClassLength
